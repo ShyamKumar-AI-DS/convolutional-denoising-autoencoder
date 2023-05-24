@@ -24,9 +24,10 @@ We create two networks , one for encoding and one for decoding.
 
 
 ## PROGRAM
+```
 NAME : Shyam Kumar A
 REG NO : 212221230098
-
+```
 ### Import required libraries
 ```
 from tensorflow import keras
@@ -119,11 +120,11 @@ plt.show()
 ## OUTPUT
 
 ### parameters for the model
-![OP](OP2.png)
+![OP](dl1.png)
 
 ### Original vs Noisy Vs Reconstructed Image
 
-![OP](OP1.png)
+![OP](dl2.png)
 
 
 
