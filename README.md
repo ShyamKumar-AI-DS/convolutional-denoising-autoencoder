@@ -67,24 +67,27 @@ plt.show()
 ```
 ### creating model, compile and fitting it
 ```
-input_img = keras.Input(shape=(28, 28, 1))
-conv1  = layers.Conv2D(32,(3,3),activation ='relu',padding = 'same')(input_img)
-maxpool1 = layers.MaxPooling2D((2,2),padding='same')(conv1)
-conv2  = layers.Conv2D(32,(3,3),activation ='relu',padding = 'same')(maxpool1)
-maxpool2 = layers.MaxPooling2D((2,2),padding='same')(conv1)
-conv3  = layers.Conv2D(32,(3,3),activation ='relu',padding = 'same')(maxpool2)
-maxpool3 = layers.MaxPooling2D((2,2),padding='same')(conv3)
-conv4  = layers.Conv2D(32,(3,3),activation ='relu',padding = 'same')(maxpool3)
-upsamp1 = layers.UpSampling2D((2,2))(conv4)
-conv5  = layers.Conv2D(32,(3,3),activation ='relu',padding = 'same')(upsamp1)
-upsamp2 = layers.UpSampling2D((2,2))(conv5)
-output = layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same')(upsamp2)
 
-autoencoder = keras.Model(input_img, output)
+input_img = keras.Input(shape=(28, 28, 1))
+
+x = layers.Conv2D(32, (3, 3),activation = 'relu', padding='same')(input_img)
+x = layers.MaxPooling2D((2, 2), padding='same')(x)
+x = layers.Conv2D(32, (3, 3), activation = 'relu', padding='same')(x)
+encoded = layers.MaxPooling2D((2, 2), padding='same')(x)
+
+x = layers.Conv2D(32, (3, 3), activation = 'relu', padding='same')(encoded)
+x = layers.UpSampling2D((2, 2))(x)
+x = layers.Conv2D(32, (3, 3), activation = 'relu', padding='same')(x)
+x = layers.UpSampling2D((2, 2))(x)
+decoded = layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
+
+autoencoder = keras.Model(input_img, decoded)
 autoencoder.summary()
+
 autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+
 autoencoder.fit(x_train_noisy, x_train_scaled,
-                epochs=2,
+                epochs=3,
                 batch_size=128,
                 shuffle=True,
                 validation_data=(x_test_noisy, x_test_scaled))
